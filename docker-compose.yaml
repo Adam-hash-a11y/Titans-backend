@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    container_name: titans-api
+    ports:
+      - "5200:5200"
+    environment:
+      PORT: 5200
+      MONGO_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/titans?authSource=admin
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  mongodb:
+    image: mongo:7
+    container_name: titans-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: titans
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
