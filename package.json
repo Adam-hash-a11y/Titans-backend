@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "nodemon main.ts",
     "test": "jest --detectOpenHandles",
     "eslint": "npx eslint .",
     "prettier": "npx prettier . --write"
@@ -14,6 +14,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
@@ -30,5 +31,10 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.70.0"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0"
   }
 }
