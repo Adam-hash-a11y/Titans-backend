@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IUser } from "../src/types/user.types";
+import { IUser } from "../../src/types/user.types";
 import {
   isValidName,
   isValidEmail,
@@ -9,7 +9,7 @@ import {
   isValidProfileImage,
   isValidMembershipPlan,
   isValidUserBody,
-} from "../src/validator/user.validator";
+} from "../../src/validator/user.validator";
 
 describe("test isValidName validator function", () => {
   it("should return true for valid name", () => {
