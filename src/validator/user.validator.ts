@@ -1,4 +1,5 @@
 import validator from "validator";
+
 import { IUser } from "../types/user.types";
 
 export const isValidName = (name: string): boolean => {
@@ -40,11 +41,6 @@ export const isValidGender = (gender: string): boolean => {
   return gender === "male" || gender === "female" || gender === "other";
 };
 
-export const isValidProfileImage = (profileImage: string): boolean => {
-  if (typeof profileImage !== "string") return false;
-  return profileImage.length > 0;
-};
-
 export const isValidMembershipPlan = (membershipPlan: string): boolean => {
   if (typeof membershipPlan !== "string") return false;
   return (
@@ -52,6 +48,14 @@ export const isValidMembershipPlan = (membershipPlan: string): boolean => {
     membershipPlan === "standard" ||
     membershipPlan === "premium"
   );
+};
+
+export const isValidProfileImage = (file: Express.Multer.File): boolean => {
+  if (!file) return false;
+
+  const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
+
+  return allowedMimeTypes.includes(file.mimetype);
 };
 
 export const isValidUserBody = (user: IUser): boolean => {
@@ -64,7 +68,6 @@ export const isValidUserBody = (user: IUser): boolean => {
     "phoneNumber",
     "birthDate",
     "gender",
-    "profileImage",
     "membershipPlan",
   ]);
 
@@ -75,7 +78,7 @@ export const isValidUserBody = (user: IUser): boolean => {
   if (!user.firstName || !user.lastName) return false;
   if (!user.email || !user.phoneNumber) return false;
   if (!user.birthDate || !user.gender) return false;
-  if (!user.profileImage || !user.membershipPlan) return false;
+  if (!user.membershipPlan) return false;
 
   return true;
 };
