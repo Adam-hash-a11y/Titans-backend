@@ -14,7 +14,6 @@ const validBody = {
   phoneNumber: "+21620123456",
   birthDate: "2000-01-01",
   gender: "male",
-  profileImage: "uploads/image.png",
   membershipPlan: "premium",
 };
 
@@ -25,10 +24,22 @@ describe("POST /api/users", () => {
 
   it("should register a user and return 201", async () => {
     // Given
-    mockedRegisterUserService.mockResolvedValue(validBody as any);
+    mockedRegisterUserService.mockResolvedValue({
+      ...validBody,
+      profileImage: "test.jpg",
+    } as any);
 
     // When
-    const result = await request(app).post("/api/users").send(validBody);
+    const result = await request(app)
+      .post("/api/users")
+      .field("firstName", "Adam")
+      .field("lastName", "Ben")
+      .field("email", "adam.ben@example.com")
+      .field("phoneNumber", "+21620123456")
+      .field("birthDate", "2000-01-01")
+      .field("gender", "male")
+      .field("membershipPlan", "premium")
+      .attach("profileImage", Buffer.from("fake"), "test.jpg");
 
     // Then
     expect(result.status).toBe(201);
@@ -42,7 +53,16 @@ describe("POST /api/users", () => {
     );
 
     // When
-    const result = await request(app).post("/api/users").send(validBody);
+    const result = await request(app)
+      .post("/api/users")
+      .field("firstName", "Adam")
+      .field("lastName", "Ben")
+      .field("email", "adam.ben@example.com")
+      .field("phoneNumber", "+21620123456")
+      .field("birthDate", "2000-01-01")
+      .field("gender", "male")
+      .field("membershipPlan", "premium")
+      .attach("profileImage", Buffer.from("fake"), "test.jpg");
 
     // Then
     expect(result.status).toBe(409);
@@ -50,11 +70,17 @@ describe("POST /api/users", () => {
   });
 
   it("should return 400 for invalid body", async () => {
-    // Given
-    const body = { ...validBody, email: "not-an-email" };
-
-    // When
-    const result = await request(app).post("/api/users").send(body);
+    // Given, When
+    const result = await request(app)
+      .post("/api/users")
+      .field("firstName", "Adam")
+      .field("lastName", "Ben")
+      .field("email", "not-an-email")
+      .field("phoneNumber", "+21620123456")
+      .field("birthDate", "2000-01-01")
+      .field("gender", "male")
+      .field("membershipPlan", "premium")
+      .attach("profileImage", Buffer.from("fake"), "test.jpg");
 
     // Then
     expect(result.status).toBe(400);

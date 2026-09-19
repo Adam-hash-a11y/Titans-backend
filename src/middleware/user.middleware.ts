@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+
 import {
   isValidUserBody,
   isValidName,
@@ -6,8 +7,8 @@ import {
   isValidPhoneNumber,
   isValidBirthDate,
   isValidGender,
-  isValidProfileImage,
   isValidMembershipPlan,
+  isValidProfileImage,
 } from "../validator/user.validator";
 import { IUser } from "../types/user.types";
 
@@ -16,11 +17,17 @@ export const validateRegisterUser = (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!isValidUserBody(req.body)) {
-    return res.status(400).json({ message: "invalid or missing fields" });
+  const user = req.body as IUser;
+
+  if (!req.file) {
+    return res.status(400).json({ message: "profile image is required" });
   }
 
-  const user = req.body as IUser;
+  if (!isValidProfileImage(req.file)) {
+    return res.status(400).json({
+      message: "Only JPEG, PNG, or WEBP images are allowed",
+    });
+  }
 
   if (!isValidName(user.firstName) || !isValidName(user.lastName)) {
     return res.status(400).json({
@@ -53,15 +60,14 @@ export const validateRegisterUser = (
       .json({ message: "gender must be male, female or other" });
   }
 
-  if (!isValidProfileImage(user.profileImage)) {
-    return res.status(400).json({ message: "profile image is required" });
-  }
-
   if (!isValidMembershipPlan(user.membershipPlan)) {
-    return res
-      .status(400)
-      .json({ message: "membership plan must be basic, standard or premium" });
+    return res.status(400).json({
+      message: "membership plan must be basic, standard or premium",
+    });
   }
 
+  if (!isValidUserBody(req.body)) {
+    return res.status(400).json({ message: "invalid or missing fields" });
+  }
   next();
 };

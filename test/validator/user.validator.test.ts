@@ -6,9 +6,9 @@ import {
   isValidPhoneNumber,
   isValidBirthDate,
   isValidGender,
-  isValidProfileImage,
   isValidMembershipPlan,
   isValidUserBody,
+  isValidProfileImage,
 } from "../../src/validator/user.validator";
 
 describe("test isValidName validator function", () => {
@@ -220,41 +220,6 @@ describe("test isValidGender validator function", () => {
   });
 });
 
-describe("test isValidProfileImage validator function", () => {
-  it("should return true for a non-empty string", () => {
-    // Given
-    const profileImage = "uploads/image.png";
-
-    // When
-    const result = isValidProfileImage(profileImage);
-
-    // Then
-    expect(result).toBe(true);
-  });
-
-  it("should return false for an empty string", () => {
-    // Given
-    const profileImage = "";
-
-    // When
-    const result = isValidProfileImage(profileImage);
-
-    // Then
-    expect(result).toBe(false);
-  });
-
-  it("should return false for a number", () => {
-    // Given
-    const profileImage = 123;
-
-    // When
-    const result = isValidProfileImage(profileImage as any);
-
-    // Then
-    expect(result).toBe(false);
-  });
-});
-
 describe("test isValidMembershipPlan validator function", () => {
   it("should return true for basic", () => {
     // Given
@@ -311,7 +276,6 @@ describe("test isValidUserBody validator function", () => {
       phoneNumber: "+21620123456",
       birthDate: new Date("2000-01-01"),
       gender: "male",
-      profileImage: "uploads/image.png",
       membershipPlan: "premium",
     };
 
@@ -357,6 +321,71 @@ describe("test isValidUserBody validator function", () => {
 
     // When
     const result = isValidUserBody(body as any);
+
+    // Then
+    expect(result).toBe(false);
+  });
+});
+
+describe("test isValidProfileImage validator function", () => {
+  it("should return true for JPEG image", () => {
+    // Given
+    const file = {
+      mimetype: "image/jpeg",
+    } as Express.Multer.File;
+
+    // When
+    const result = isValidProfileImage(file);
+
+    // Then
+    expect(result).toBe(true);
+  });
+
+  it("should return true for PNG image", () => {
+    // Given
+    const file = {
+      mimetype: "image/png",
+    } as Express.Multer.File;
+
+    // When
+    const result = isValidProfileImage(file);
+
+    // Then
+    expect(result).toBe(true);
+  });
+
+  it("should return true for WEBP image", () => {
+    // Given
+    const file = {
+      mimetype: "image/webp",
+    } as Express.Multer.File;
+
+    // When
+    const result = isValidProfileImage(file);
+
+    // Then
+    expect(result).toBe(true);
+  });
+
+  it("should return false for invalid image type", () => {
+    // Given
+    const file = {
+      mimetype: "image/gif",
+    } as Express.Multer.File;
+
+    // When
+    const result = isValidProfileImage(file);
+
+    // Then
+    expect(result).toBe(false);
+  });
+
+  it("should return false when file is missing", () => {
+    // Given
+    const file = null;
+
+    // When
+    const result = isValidProfileImage(file as any);
 
     // Then
     expect(result).toBe(false);
