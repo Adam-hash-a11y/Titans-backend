@@ -2,12 +2,19 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { router } from "./src/routes";
+import cors from "cors";
 
 export const app = express();
 
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 
 app.use(
   helmet({
@@ -54,4 +61,5 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Welcome to Titans gym" });
 });
 
+app.use("/uploads", express.static("uploads"));
 app.use("/api", router);
