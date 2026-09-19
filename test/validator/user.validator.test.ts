@@ -276,7 +276,6 @@ describe("test isValidUserBody validator function", () => {
       phoneNumber: "+21620123456",
       birthDate: new Date("2000-01-01"),
       gender: "male",
-      profileImage: "uploads/image.png",
       membershipPlan: "premium",
     };
 
