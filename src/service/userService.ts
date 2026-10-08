@@ -5,7 +5,7 @@ export const registerUserService = async (user: IUser) => {
   const isExistingUser = await findUserByEmail(user.email);
 
   if (isExistingUser) {
-    throw new Error("User already exists");
+    throw new Error("User Email already exists");
   }
 
   return await createUser(user);

@@ -1,12 +1,8 @@
-import { createDefaultPreset } from "ts-jest";
-
-const tsJestTransformCfg = createDefaultPreset().transform;
-
-/** @type {import("jest").Config} **/
-module.exports = {
+/** @type {import("jest").Config} */
+export default {
   setupFiles: ["dotenv/config"],
   testEnvironment: "node",
   transform: {
-    ...tsJestTransformCfg,
+    "^.+\\.(t|j)sx?$": ["@swc/jest"],
   },
 };

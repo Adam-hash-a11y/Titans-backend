@@ -52,6 +52,6 @@ describe("test registerUserService function", () => {
     const action = registerUserService(user);
 
     // Then
-    await expect(action).rejects.toThrow("User already exists");
+    await expect(action).rejects.toThrow("User Email already exists");
   });
 });
